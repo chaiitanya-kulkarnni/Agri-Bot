@@ -1,0 +1,177 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agri Robot Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <style>
+        .card {
+            border-radius: 12px;
+        }
+        .card-title {
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .card-value {
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+        .icon {
+            font-size: 2.5rem;
+            color: #d1d3e2;
+        }
+        .control-btn {
+            font-size: 1.1rem;
+            padding: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <!-- Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Agri Robot – Disease Forecasting</h2>
+    </div>
+
+    <!-- SENSOR CARDS -->
+    <div class="row g-4">
+
+        <!-- Temperature -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-primary shadow h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-auto">
+                        <p class="card-title text-primary">Temperature</p>
+                        <div id="temp" class="card-value text-dark">--</div>
+                    </div>
+                    <i class="fas fa-thermometer-half icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Humidity -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-success shadow h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-auto">
+                        <p class="card-title text-success">Humidity</p>
+                        <div id="humidity" class="card-value text-dark">--</div>
+                    </div>
+                    <i class="fas fa-water icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Soil Moisture -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-info shadow h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-auto">
+                        <p class="card-title text-info">Soil Moisture</p>
+                        <div id="moisture" class="card-value text-dark">--</div>
+                    </div>
+                    <i class="fas fa-seedling icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disease -->
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-warning shadow h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="me-auto">
+                        <p class="card-title text-warning">Predicted Disease</p>
+                        <div id="disease" class="card-value text-dark">--</div>
+                    </div>
+                    <i class="fas fa-disease icon"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ROBOT CONTROL -->
+    <div class="row mt-5">
+        <div class="col-md-6 mx-auto text-center">
+            <h4 class="mb-4">Robot Control</h4>
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary control-btn" onclick="sendCommand('forward')">
+                    ⬆ Forward
+                </button>
+
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-secondary control-btn" onclick="sendCommand('left')">
+                        ⬅ Left
+                    </button>
+
+                    <button class="btn btn-danger control-btn" onclick="sendCommand('stop')">
+                        ⏹ Stop
+                    </button>
+
+                    <button class="btn btn-secondary control-btn" onclick="sendCommand('right')">
+                        ➡ Right
+                    </button>
+                </div>
+
+                <button class="btn btn-primary control-btn" onclick="sendCommand('backward')">
+                    ⬇ Backward
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+
+// Robot Control
+function sendCommand(direction) {
+    fetch(`/move/${direction}`, { method: "POST" })
+        .then(res => res.json())
+        .then(data => console.log("Command:", data))
+        .catch(err => console.error("Error:", err));
+}
+
+// Fetch Sensor Data
+function updateSensorData() {
+    fetch('/api/sensor')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("temp").innerHTML = data.temperature + " °C";
+            document.getElementById("humidity").innerHTML = data.humidity + " %";
+            document.getElementById("moisture").innerHTML = data.moisture + " %";
+            document.getElementById("disease").innerHTML = data.disease;
+        })
+        .catch(error => console.error("Fetch Error:", error));
+}
+
+// Auto refresh every 2 seconds
+setInterval(updateSensorData, 2000);
+
+// Initial load
+updateSensorData();
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+{% endblock %}

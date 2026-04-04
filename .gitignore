@@ -1,0 +1,99 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+dist/
+build/
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Flask
+instance/
+.webassets-cache
+flask_session/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Uploaded files (keep folder structure but ignore contents)
+upload/*
+!upload/.gitkeep
+static/img/*.jpg
+static/img/*.png
+static/img/*.jpeg
+static/img/*.gif
+!static/img/.gitkeep
+
+# Training/Test datasets (too large for Git - download separately)
+mydata/
+!mydata/.gitkeep
+
+# Third-party vendor libraries (install via npm/download separately)
+static/vendor/
+node_modules/
+
+# Environment variables and sensitive config
+.env
+.env.local
+.env.*.local
+config.py
+config.local.py
+
+# ML Model files (large files - should be downloaded separately or generated)
+*.h5
+*.pkl
+*.pth
+*.ckpt
+*.weights
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json

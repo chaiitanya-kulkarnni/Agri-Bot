@@ -1,0 +1,140 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+    </div>
+
+    <!-- TOP CARDS -->
+    <div class="row">
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-primary">Dataset Size</div>
+                    <div class="h5 font-weight-bold">4000</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-success">Training Size</div>
+                    <div class="h5 font-weight-bold">70%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-info">Test Size</div>
+                    <div class="h5 font-weight-bold">30%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-warning">Accuracy</div>
+                    <div class="h5 font-weight-bold">97%</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- EXISTING GRAPHS -->
+    <div class="row">
+
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header font-weight-bold text-primary">
+                    Accuracy Graph
+                </div>
+                <div class="card-body">
+                    <img src="static/img/Accuracy.png" style="width:100%;">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header font-weight-bold text-primary">
+                    Confusion Matrix
+                </div>
+                <div class="card-body">
+                    <img src="static/img/confusionMatrix.png" style="width:100%;">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- EXISTING PERFORMANCE -->
+    <div class="card shadow mb-4">
+        <div class="card-header font-weight-bold text-primary">
+            Leaf Disease Detection Performance
+        </div>
+        <div class="card-body">
+
+            <h4>Accuracy: 97%</h4>
+            <h4>Precision: 90%</h4>
+            <h4>F1 Score: 60%</h4>
+            <h4>Validation Accuracy: 80%</h4>
+
+        </div>
+    </div>
+
+    <!-- 🔥 NEW SENSOR MODEL COMPARISON -->
+    <div class="card shadow mb-4">
+        <div class="card-header font-weight-bold text-primary">
+            Sensor-Based Disease Prediction (Model Comparison)
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+                <table class="table table-bordered text-center">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Model</th>
+                            <th>Accuracy</th>
+                            <th>Precision</th>
+                            <th>Recall</th>
+                            <th>F1 Score</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for row in model_results %}
+                        <tr>
+                            <td><b>{{ row[0] }}</b></td>
+                            <td>{{ row[1] }}</td>
+                            <td>{{ row[2] }}</td>
+                            <td>{{ row[3] }}</td>
+                            <td>{{ row[4] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+            <!-- Observation -->
+            <p class="mt-3">
+                <b>Observation:</b> Decision Tree and Random Forest achieved the highest accuracy (100%),
+                making them ideal for real-time IoT deployment. SVM also performed well, while ANN showed slightly lower performance.
+            </p>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

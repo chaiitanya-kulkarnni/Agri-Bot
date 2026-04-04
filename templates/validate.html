@@ -1,0 +1,202 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Model Validation</h1>
+    </div>
+
+    <!-- Accuracy Summary Cards -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Validation Accuracy</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ accuracy }}%</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Correct Predictions</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ correct }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-thumbs-up fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Total Tested</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-vials fa-2x text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Dataset Size</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ dataset_size }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-database fa-2x text-info"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sample Selection Form -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Select Validation Samples</h6>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="/validate">
+                <div class="form-row align-items-center">
+                    <div class="col-auto">
+                        <label class="sr-only" for="num_samples">Number of Samples</label>
+                        <input type="number" class="form-control mb-2" id="num_samples" name="num_samples" 
+                               placeholder="Number of samples" value="{{ num_samples }}" min="1" max="{{ dataset_size }}">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary mb-2">
+                            <i class="fas fa-sync"></i> Validate
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <small class="text-muted">Select number of samples to test (1-{{ dataset_size }})</small>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Validation Results Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Validation Results</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Temperature (°C)</th>
+                            <th>Humidity (%)</th>
+                            <th>Moisture (%)</th>
+                            <th>Actual Disease</th>
+                            <th>Predicted Disease</th>
+                            <th>Match</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in validation_results %}
+                        <tr {% if result.status == 'Correct' %}class="table-success"{% else %}class="table-danger"{% endif %}>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ result.temperature }}</td>
+                            <td>{{ result.humidity }}</td>
+                            <td>{{ result.moisture }}</td>
+                            <td><strong>{{ result.actual }}</strong></td>
+                            <td><strong>{{ result.predicted }}</strong></td>
+                            <td>
+                                {% if result.match == 'Yes' %}
+                                    <span class="badge badge-success">✓ Yes</span>
+                                {% else %}
+                                    <span class="badge badge-danger">✗ No</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if result.status == 'Correct' %}
+                                    <span class="text-success font-weight-bold">
+                                        <i class="fas fa-check-circle"></i> Correct
+                                    </span>
+                                {% else %}
+                                    <span class="text-danger font-weight-bold">
+                                        <i class="fas fa-times-circle"></i> Wrong
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Validation Summary -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Validation Summary</h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2">
+                        <strong>Model Performance:</strong> 
+                        {% if accuracy >= 95 %}
+                            <span class="text-success">Excellent</span>
+                        {% elif accuracy >= 85 %}
+                            <span class="text-info">Good</span>
+                        {% elif accuracy >= 70 %}
+                            <span class="text-warning">Fair</span>
+                        {% else %}
+                            <span class="text-danger">Needs Improvement</span>
+                        {% endif %}
+                    </p>
+                    <p class="mb-2">
+                        <strong>Tested Samples:</strong> {{ total }} out of {{ dataset_size }} total records ({{ (total / dataset_size * 100) | round(2) }}%)
+                    </p>
+                    <p class="mb-0">
+                        <strong>Success Rate:</strong> {{ correct }} correct predictions out of {{ total }} tested
+                    </p>
+                    <hr>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-info-circle"></i> 
+                        This validation compares the model's predictions against actual labeled data from the dataset. 
+                        Green rows indicate correct predictions, red rows indicate mismatches.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
