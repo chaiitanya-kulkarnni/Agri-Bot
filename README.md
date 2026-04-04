@@ -53,6 +53,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
+
 The application will be accessible at: **http://localhost:5000**
 
 ## 🎯 Features
