@@ -62,8 +62,8 @@ static/img/*.gif
 !static/img/.gitkeep
 
 # Training/Test datasets (too large for Git - download separately)
-mydata/
-!mydata/.gitkeep
+# mydata/
+# !mydata/.gitkeep
 
 # Third-party vendor libraries (install via npm/download separately)
 static/vendor/
